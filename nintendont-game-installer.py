@@ -68,5 +68,20 @@ for file in os.listdir(inputDir):
     elif file.endswith("dumpinfo.txt"):
         print("Moving " + file)
         os.rename(inputDir + file, outputDrive + "/games/dumpinfo/" + file)
+    elif file.endswith(".gct"):
+        base = os.path.basename(file)
+        game = os.path.splitext(base)[0]
+        installDir = outputDrive + "games/" + game
+        if os.path.isdir(installDir) == False:
+            print(game + " is not installed! Cannot install cheat file!")
+        elif os.path.isdir(installDir) == True:
+            print(game + " is installed! Continuing!")
+        if os.path.exists(installDir + "/" + file) == True:
+            print(game + " is already installed. Continuing!")
+            os.remove(inputDir + file)
+        elif os.path.exists(installDir + "/" + file) == False:
+            print("Installing cheat file for " + game)
+            os.rename(inputDir + file, installDir + "/" + file)
+        
 print("Games have finished installing. Quitting in 5 seconds")
 time.sleep(5)
