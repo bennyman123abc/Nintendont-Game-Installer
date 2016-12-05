@@ -41,10 +41,14 @@ if outputExists == False:
     os.makedirs(outputDrive + "games")
 elif outputExists == True:
     print(outputDrive + "games/ already exists. Continuing!")
+if os.path.isdir(outputDrive + "games/dumpinfo") == False:
+    print(outputDrive + "games/dumpinfo/ does not exist. Creating it now!")
+    os.makedirs(outputDrive + "games/dumpinfo")
+elif os.path.isdir(outputDrive + "games/dumpinfo") == True:
+    print(outputDrive + "games/dumpinfo/ already exists. Continuing!")
     
 for file in os.listdir(inputDir):
     if file.endswith(".iso"):
-        posInstalled = False
         base = os.path.basename(file)
         game = os.path.splitext(base)[0]
         installDir = outputDrive + "games/" + game
@@ -53,16 +57,16 @@ for file in os.listdir(inputDir):
             os.makedirs(installDir)
         elif os.path.isdir(installDir) == True:
             print(installDir + "/ already exists. Continuing!")
-            posInstalled = True
         if os.path.exists(installDir + "/" + "game.iso") == True:
             print(game + " is already installed. Continuing!")
             os.remove(inputDir + file)
         elif os.path.exists(installDir + "/" + "game.iso") == False:
-            print("Installing " + game + ". This may take a few minutes!")
-            copyfile(inputDir + file, installDir + "/" + file)
-            os.rename(installDir + "/" + file, installDir + "/" + "game.iso")
-            os.remove(inputDir + file)
+            print("Installing " + game)
+            os.rename(inputDir + file, installDir + "/" + "game.iso")
     elif file.endswith(".bca"):
         os.remove(inputDir + file)
+    elif file.endswith("dumpinfo.txt"):
+        print("Moving " + file)
+        os.rename(inputDir + file, outputDrive + "/games/dumpinfo/" + file)
 print("Games have finished installing. Quitting in 5 seconds")
 time.sleep(5)
